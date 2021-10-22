@@ -1,3 +1,11 @@
+#############################################################
+##
+## Author: Pankaj Kumar
+## Email: pk7z@virginia.edu
+## Location: Bioinformatics Core
+##
+############################################################
+
 #Arg1 is list of sample "Sample_Name"
 #Arg2 is file /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/REFERENCE-GENOME-STAR-INDEZ-150bp/Mus_musculus.GRCm38.91.chr.gtf.geneid-ensembleid-start-end.totalexonssize.bed
 #ARG3 is present working directory "/scratch/$USER/rnaseq_workshop" 
