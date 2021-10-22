@@ -1,7 +1,3 @@
-#Author: Pankaj Kumar
-#Email: pk7z@virginia.edu
-#Location: Bioinformatics Core
-
 #!/bin/bash
 #SBATCH -N 1                    #number of nodes for the job
 #SBATCH --cpus-per-task=4      #number of cpus per task
@@ -13,6 +9,10 @@
 #SBATCH -A kumarlab 
 
 #############################################################################################################################################
+##
+## Author: Pankaj Kumar
+## Email: pk7z@virginia.edu
+## Location: Bioinformatics Core
 ##
 ## This script runs a custum script for Adaptor sequence identification
 ## The output will be saved in current working directory
