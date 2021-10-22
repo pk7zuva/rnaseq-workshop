@@ -1,3 +1,3 @@
 # rnaseq-workshop
 
-Please use "steps.sh" script as guide
+Please use "https://github.com/pk7zuva/rnaseq-workshop/blob/main/steps.sh" script as guide
