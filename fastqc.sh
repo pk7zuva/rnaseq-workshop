@@ -11,6 +11,11 @@
 
 #############################################################################################################################################
 ##
+## Author: Pankaj Kumar
+## Email: pk7z@virginia.edu
+## Location: Bioinformatics Core
+##
+############################################################
 ## This script runs fastqc files in the current working directory 
 ## The output will be saved in FASTQC directory
 ## 
