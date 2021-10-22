@@ -99,7 +99,7 @@ sbatch /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script
 #Step 13 
 #Making index, mapping the reads to genome and transcriptome and finally quantitation
 #https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/
-#Arg1 is the list of samples
+#Arg1 is the list of /scratch/$USER/rnaseq_workshop/Sample_Name
 #Arg2 is the name of present working directory. Type pwd in your terminal. copy and paste that path in place of $2
 #Arg3 is the first read suffix "_R1_001.fastq.gz"
 #Arg4 is 2nd read suffix "_R2_001.fastq.gz"
@@ -109,9 +109,10 @@ sbatch /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script
 #Arg8 is number of cores. In our case this should be 10 because each workshop participants are approved for 10 cores and 24 cores to use.
 #Arg9 is gtf file. In this case "Mus_musculus.GRCm38.91.chr.gtf"  
 #Arg10 is File that has gene length information "Mus_musculus.GRCm38.91.chr.gtf.geneid-ensembleid-start-end.totalexonssize.bed" 
-#Arg11 is Count matrix file "rnaseq_workshop_count_matrix.txt" 
+#Arg11 is Count matrix file "/scratch/$USER/rnaseq_workshop/rnaseq_workshop_count_matrix.txt" 
 
-sbatch /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/mapping.sh /scratch/$USER/rnaseq_workshop/Sample_Name/Sample_Name /scratch/$USER/rnaseq_workshop -ADRM_R1_001.fastq.gz -ADRM_R2_001.fastq.gz /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/REFERENCE-GENOME-STAR-INDEZ-150bp/Mus_musculus.GRCm38.dna.primary_assembly.fa  /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/REFERENCE-GENOME-STAR-INDEZ-150bp 149 20 /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/REFERENCE-GENOME-STAR-INDEZ-150bp/Mus_musculus.GRCm38.91.chr.gtf /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/REFERENCE-GENOME-STAR-INDEZ-150bp/Mus_musculus.GRCm38.91.chr.gtf.geneid-ensembleid-start-end.totalexonssize.bed /scratch/$USER/rnaseq_workshop/Sample_Name/rnaseq_workshop_count_matrix.txt
+sbatch /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/mapping.sh /scratch/$USER/rnaseq_workshop/Sample_Name /scratch/$USER/rnaseq_workshop -ADRM_R1_001.fastq.gz -ADRM_R2_001.fastq.gz /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/REFERENCE-GENOME-STAR-INDEZ-150bp/Mus_musculus.GRCm38.dna.primary_assembly.fa  /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/REFERENCE-GENOME-STAR-INDEZ-150bp 149 20 /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/REFERENCE-GENOME-STAR-INDEZ-150bp/Mus_musculus.GRCm38.91.chr.gtf /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/REFERENCE-GENOME-STAR-INDEZ-150bp/Mus_musculus.GRCm38.91.chr.gtf.geneid-ensembleid-start-end.totalexonssize.bed /scratch/$USER/rnaseq_workshop/rnaseq_workshop_count_matrix.txt
+
 ################################################################################
 ##
 ## You just generated a count matrix that yoy will use in RNA-Seq workshp Day 2
