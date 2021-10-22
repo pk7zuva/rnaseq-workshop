@@ -10,6 +10,10 @@
 
 #############################################################################################################################################
 ##
+## Author: Pankaj Kumar
+## Email: pk7z@virginia.edu
+## Location: Bioinformatics Core
+##
 ## This script runs mapping of reads to genome and transcriptome
 ## The output will be saved in current working directory
 ## The final file 
