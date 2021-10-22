@@ -7,6 +7,9 @@ If you are encountering any errors running these steps on University Of Virginia
 # Imporatnt Reading
 
 https://www.bioinformatics.babraham.ac.uk/projects/fastqc/
+
 https://multiqc.info
+
 https://cutadapt.readthedocs.io/en/stable/https://cutadapt.readthedocs.io/en/stable/
+
 https://github.com/alexdobin/STAR
