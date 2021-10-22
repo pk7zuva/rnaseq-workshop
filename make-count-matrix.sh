@@ -1,3 +1,11 @@
+#############################################################
+##
+## Author: Pankaj Kumar
+## Email: pk7z@virginia.edu
+## Location: Bioinformatics Core
+##
+############################################################
+
 #Arg1 is the list of sample name "Sample_Name"
 #Arg2 output file name "rnaseq_workshop_count_matrix.txt" 
 cat $1 | awk '{printf ("%s\t",$1)}' | awk '{printf ("Ensembl-Gene-Id\tGene-Id\t%s\n",$0)}'> $2
