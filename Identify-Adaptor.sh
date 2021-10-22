@@ -1,3 +1,7 @@
+#Author: Pankaj Kumar
+#Email: pk7z@virginia.edu
+#Location: Bioinformatics Core
+
 #!/bin/bash
 #SBATCH -N 1                    #number of nodes for the job
 #SBATCH --cpus-per-task=4      #number of cpus per task
