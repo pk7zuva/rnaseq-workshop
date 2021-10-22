@@ -1,7 +1,10 @@
-#Author: Pankaj Kumar
-#Email: pk7z@virginia.edu
-#Location: Bioinformatics Core
-
+#############################################################
+##
+## Author: Pankaj Kumar
+## Email: pk7z@virginia.edu
+## Location: Bioinformatics Core
+##
+############################################################
 
 #Step 1
 #Login to Rivanna
