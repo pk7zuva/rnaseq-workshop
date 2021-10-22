@@ -1,3 +1,3 @@
 # rnaseq-workshop
 
-Please use
+Please use "steps.sh" script as guide
