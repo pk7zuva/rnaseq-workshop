@@ -14,6 +14,10 @@
  
 #############################################################################################################################################
 ##
+## Author: Pankaj Kumar
+## Email: pk7z@virginia.edu
+## Location: Bioinformatics Core
+##
 ## This script removes the adaptor sequence from the raw sequencing data
 ## The output will be saved in the same directory with file extention "ADRM_R1_001.fastq.gz" and "ADRM_R2_001.fastq.gz"
 ## 
