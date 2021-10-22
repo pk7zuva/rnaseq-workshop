@@ -19,8 +19,11 @@
 ## The final file 
 #############################################################################################################################################
 
-#Arg1 is the list of samples
-#Arg2 is the name of present working directory
+#Step 13 
+#Making index, mapping the reads to genome and transcriptome and finally quantitation
+#https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/
+#Arg1 is the list of /scratch/$USER/rnaseq_workshop/samples
+#Arg2 is the name of present working directory. Type pwd in your terminal. copy and paste that path in place of $2 "/scratch/$USER/rnaseq_workshop/"
 #Arg3 is the first read suffix "_R1_001.fastq.gz"
 #Arg4 is 2nd read suffix "_R2_001.fastq.gz"
 #Arg5 is the genome fasta file. In our case the file "Mus_musculus.GRCm38.dna.primary_assembly.fa" is gtf file.  
@@ -29,7 +32,7 @@
 #Arg8 is number of cores. In our case this should be 10 because each workshop participants are approved for 10 cores and 24 cores to use.
 #Arg9 is gtf file. In this case "Mus_musculus.GRCm38.91.chr.gtf"  
 #Arg10 is File that has gene length information "Mus_musculus.GRCm38.91.chr.gtf.geneid-ensembleid-start-end.totalexonssize.bed" 
-#Arg11 is Count matrix file "rnaseq_workshop_count_matrix.txt" 
+#Arg11 is Count matrix file "/scratch/$USER/rnaseq_workshop/rnaseq_workshop_count_matrix.txt" 
 
 date +"%d %B %Y %H:%M:%S"
 
