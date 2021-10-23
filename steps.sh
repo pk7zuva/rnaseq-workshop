@@ -13,11 +13,11 @@ ssh pk7z@rivanna.hpc.virginia.edu # Replace the pk7z with your computing id
 
 #Step 2
 #Change directory 
-#Replace pk7z with your computing ID
+
 cd /scratch/$USER
 
 #Step 3
-#Make your new directory named "rnaseq_workshop"
+#Make a new directory named "rnaseq_workshop"
 
 mkdir rnaseq_workshop
 
@@ -28,7 +28,7 @@ cd rnaseq_workshop
 
 
 #Step 5
-#Make a symlink of all the fastq files so you could see them in your directory without creating additional copy
+#Make a symlink of all the fastq files so you could see them in your directory without creating additional copy. Please do not copy these files to your personal computer.
 
 ln -s /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/fastq/* .
 
@@ -43,13 +43,16 @@ sbatch /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script
 
 
 #Step 7
-#Combine the fastqc report using multiqc (this program is not installed on Rivanna). 
+#Combine the fastqc report using multiqc (this program is not installed on Rivanna). Type the below two command one by one on your terminal
+
 module load bioconda/py3.8
+
 multiqc .
 
 
 
-#Step 8 Review the multiqc report
+#Step 8 Review the multiqc report. 
+
 cp multiqc_report.html /home/$USER/.
 
 #############################################################################################################################################
@@ -65,12 +68,12 @@ cp multiqc_report.html /home/$USER/.
 
 
 #Step 8
-#Make sample list
+#Making sample list. 
 
 ls *_R1_001.fastq.gz | sed -e s/_R1_001.fastq.gz//g > Sample_Name
 
 #Step 9
-#Check the sample name
+#Check the sample name. Sample name should be unique.
 
 cat Sample_Name
 
@@ -79,16 +82,21 @@ cat Sample_Name
 #We are going to use cutadapt for the adaptor removal. But before that we need to find the adaptor sequence. In the current case we have paired-end reads so we have to identify two adaptors.
 
 sbatch /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/Identify-Adaptor.sh Sample_Name _R1_001.fastq.gz _R2_001.fastq.gz 
-#Adaptor-R1.txt has R1 adaptor sequence 
-#Adaptor-R2.txt has R2 adaptor sequence 
-#Inspect Adaptor sequence (Have fun!)
+
+###################################################################
+##
+## Adaptor-R1.txt has R1 adaptor sequence 
+## Adaptor-R2.txt has R2 adaptor sequence 
+## Inspect Adaptor sequence (Have fun!)
+##
+##################################################################
 
 cat Adaptor-R1.txt
 cat Adaptor-R2.txt
 
 
 zcat Naive-memory-sample-4_R2_001.fastq.gz | head -500 | grep AGATCGGAAGAGCGTCGTGTAG 
-#Inspect upstream and downstream to Adaptor sequence 
+#Inspect sequence upstream and downstream from the Adaptor sequence. Can you see any pattern?  
 
 
 #Step 11 (Time: 10 min)
@@ -123,11 +131,15 @@ bash /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/e
 
 
 #Step 15
-#Make count matrix
 #Making count matrix
 
 bash /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/make-count-matrix.sh /scratch/$USER/rnaseq_workshop/Sample_Name /scratch/$USER/rnaseq_workshop/rnaseq_workshop_count_matrix.txt
 
+
+#Step 16
+#Making fpkm matrix
+
+bash /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/make-fpkm-matrix.sh /scratch/$USER/rnaseq_workshop/Sample_Name /scratch/$USER/rnaseq_workshop/rnaseq_workshop_fpkm_matrix.txt
 
 ############################################################################################
 ##
