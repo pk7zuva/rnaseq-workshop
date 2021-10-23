@@ -31,8 +31,7 @@
 #Arg7 is the subject overhang. This should be length of read minus one. In our case length of the read is 150 so this value should be 149
 #Arg8 is number of cores. In our case this should be 10 because each workshop participants are approved for 10 cores and 24 cores to use.
 #Arg9 is gtf file. In this case "Mus_musculus.GRCm38.91.chr.gtf"  
-#Arg10 is File that has gene length information "Mus_musculus.GRCm38.91.chr.gtf.geneid-ensembleid-start-end.totalexonssize.bed" 
-#Arg11 is Count matrix file "/scratch/$USER/rnaseq_workshop/rnaseq_workshop_count_matrix.txt" 
+#Usage bash /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/mapping.sh /scratch/$USER/rnaseq_workshop/Sample_Name /scratch/$USER/rnaseq_workshop -ADRM_R1_001.fastq.gz -ADRM_R2_001.fastq.gz /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/REFERENCE-GENOME-STAR-INDEZ-150bp/Mus_musculus.GRCm38.dna.primary_assembly.fa  /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/REFERENCE-GENOME-STAR-INDEZ-150bp 149 20 /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/REFERENCE-GENOME-STAR-INDEZ-150bp/Mus_musculus.GRCm38.91.chr.gtf
 
 date +"%d %B %Y %H:%M:%S"
 
@@ -125,12 +124,6 @@ STAR --genomeDir $6 \
 --outSAMheaderHD @HD VN:1.4 \
 --outSAMattrRGline ID:${SAMPLES} SM:${SAMPLES}
 done
-
-#Calculating FPKM and adding gene name
-bash /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/ensemble-v27-geneid-count-fpkm.MM10.sh $1 $10 $2
-
-#Making count matrix
-bash /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/make-count-matrix.sh $1 $11
 
 # unload modules
 module purge
