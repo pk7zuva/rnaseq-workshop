@@ -8,6 +8,8 @@
 
 #Arg1 is the list of sample name "Sample_Name"
 #Arg2 output file name "rnaseq_workshop_count_matrix.txt" 
+#Usage: bash /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/make-fpkm-matrix.sh /scratch/$USER/rnaseq_workshop/Sample_Name /scratch/$USER/rnaseq_workshop/rnaseq_workshop_fpkm_matrix.txt
+
 cat $1 | awk '{printf ("%s\t",$1)}' | awk '{printf ("Ensembl-Gene-Id\tGene-Id\t%s\n",$0)}'> $2
 PASTE2=`cat $1 | awk '{printf ("%s/*gene_id-fpkm.out ",$1)}'`
 echo "paste $PASTE2" > Foo.sh
