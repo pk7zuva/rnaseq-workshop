@@ -41,7 +41,9 @@ ln -s /project/rivanna-training/rna-seq_21/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-O
 #Check the quality of the raw sequencing data (RNA-seq data)
 #We are going to use fastqc program for this
 
-sbatch /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/fastqc.sh 
+#sbatch /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/fastqc.sh 
+
+sbatch /project/rivanna-training/rna-seq_21/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/fastqc.sh 
 
 
 #Step 7
