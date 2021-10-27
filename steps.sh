@@ -77,17 +77,17 @@ cp multiqc_report.html /home/$USER/.
 #############################################################################################################################################
 
 
-#Step 8
+#Step 9
 #Making sample list. 
 
 ls *_R1_001.fastq.gz | sed -e s/_R1_001.fastq.gz//g > Sample_Name
 
-#Step 9
+#Step 10
 #Check the sample name. Sample name should be unique.
 
 cat Sample_Name
 
-#Step 10 (Time: 4 min) 
+#Step 11 (Time: 4 min) 
 #After reviewing the multiqc report it was found that a significant fraction of reads are contaminated with adaptor sequence. Why? Any idea?
 #We are going to use cutadapt for the adaptor removal. But before that we need to find the adaptor sequence. In the current case we have paired-end reads so we have to identify two adaptors.
 
@@ -111,7 +111,7 @@ zcat Naive-memory-sample-4_R2_001.fastq.gz | head -500 | grep AGATCGGAAGAGCGTCGT
 #Inspect sequence upstream and downstream from the Adaptor sequence. Can you see any pattern?  
 
 
-#Step 11 (Time: 10 min)
+#Step 12 (Time: 10 min)
 #Remove the adaptor sequence from the raw sequencing data. 
 
 #sbatch /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/cutadapt.sh Sample_Name Adaptor-R1.txt Adaptor-R2.txt 
