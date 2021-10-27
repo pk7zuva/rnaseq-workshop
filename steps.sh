@@ -31,7 +31,7 @@ cd rnaseq_workshop
 #Make a symlink of all the fastq files so you could see them in your directory without creating additional copy. Please do not copy these files to your personal computer.
 
 #ln -s /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/fastq/* .
-ln -s /scratch/pk7z/rnaseq_workshop] ln -s /project/rivanna-training/rna-seq_21/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/fastq/* .
+ln -s /project/rivanna-training/rna-seq_21/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/fastq/* .
 
 
 #Notes: without copying the data now you could see all the fastq files in your directory. The idea is to have all the raw sequencing files in your working directory.
