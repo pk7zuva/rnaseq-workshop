@@ -16,6 +16,12 @@ ssh pk7z@rivanna.hpc.virginia.edu # Replace the pk7z with your computing id
 
 cd /scratch/$USER
 
+
+# I am adding this additional step without step number to clean the previous data
+
+rm -rf rnaseq_workshop
+
+
 #Step 3
 #Make a new directory named "rnaseq_workshop"
 
