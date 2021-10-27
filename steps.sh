@@ -31,7 +31,7 @@ cd rnaseq_workshop
 #Make a symlink of all the fastq files so you could see them in your directory without creating additional copy. Please do not copy these files to your personal computer.
 
 #ln -s /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/fastq/* .
-ln -s /project/rivanna-training/rna-seq_21/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/fastq/* .
+ln -s /project/rivanna-training/rna-seq_21/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/fastq/*fastq.gz .
 
 
 #Notes: without copying the data now you could see all the fastq files in your directory. The idea is to have all the raw sequencing files in your working directory.
@@ -85,7 +85,9 @@ cat Sample_Name
 #After reviewing the multiqc report it was found that a significant fraction of reads are contaminated with adaptor sequence. Why? Any idea?
 #We are going to use cutadapt for the adaptor removal. But before that we need to find the adaptor sequence. In the current case we have paired-end reads so we have to identify two adaptors.
 
-sbatch /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/Identify-Adaptor.sh Sample_Name _R1_001.fastq.gz _R2_001.fastq.gz 
+#sbatch /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/Identify-Adaptor.sh Sample_Name _R1_001.fastq.gz _R2_001.fastq.gz 
+
+sbatch /project/rivanna-training/rna-seq_21/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/Identify-Adaptor.sh Sample_Name _R1_001.fastq.gz _R2_001.fastq.gz
 
 ###################################################################
 ##
@@ -106,7 +108,11 @@ zcat Naive-memory-sample-4_R2_001.fastq.gz | head -500 | grep AGATCGGAAGAGCGTCGT
 #Step 11 (Time: 10 min)
 #Remove the adaptor sequence from the raw sequencing data. 
 
-sbatch /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/cutadapt.sh Sample_Name Adaptor-R1.txt Adaptor-R2.txt 
+#sbatch /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/cutadapt.sh Sample_Name Adaptor-R1.txt Adaptor-R2.txt 
+
+sbatch /project/rivanna-training/rna-seq_21/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/cutadapt.sh Sample_Name Adaptor-R1.txt Adaptor-R2.txt 
+
+
 
 #Step 13 
 #Making index, mapping the reads to genome and transcriptome and finally quantitation
@@ -123,7 +129,9 @@ sbatch /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script
 
 
 
-sbatch /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/mapping.sh /scratch/$USER/rnaseq_workshop/Sample_Name /scratch/$USER/rnaseq_workshop -ADRM_R1_001.fastq.gz -ADRM_R2_001.fastq.gz /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/REFERENCE-GENOME-STAR-INDEZ-150bp/Mus_musculus.GRCm38.dna.primary_assembly.fa  /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/REFERENCE-GENOME-STAR-INDEZ-150bp 149 20 /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/REFERENCE-GENOME-STAR-INDEZ-150bp/Mus_musculus.GRCm38.91.chr.gtf 
+#sbatch /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/mapping.sh /scratch/$USER/rnaseq_workshop/Sample_Name /scratch/$USER/rnaseq_workshop -ADRM_R1_001.fastq.gz -ADRM_R2_001.fastq.gz /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/REFERENCE-GENOME-STAR-INDEZ-150bp/Mus_musculus.GRCm38.dna.primary_assembly.fa  /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/REFERENCE-GENOME-STAR-INDEZ-150bp 149 20 /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/REFERENCE-GENOME-STAR-INDEZ-150bp/Mus_musculus.GRCm38.91.chr.gtf 
+
+sbatch /project/rivanna-training/rna-seq_21/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/mapping.sh /scratch/$USER/rnaseq_workshop/Sample_Name /scratch/$USER/rnaseq_workshop -ADRM_R1_001.fastq.gz -ADRM_R2_001.fastq.gz /project/rivanna-training/rna-seq_21/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/REFERENCE-GENOME-STAR-INDEZ-150bp/Mus_musculus.GRCm38.dna.primary_assembly.fa  /project/rivanna-training/rna-seq_21/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/REFERENCE-GENOME-STAR-INDEZ-150bp 149 20 /project/rivanna-training/rna-seq_21/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/REFERENCE-GENOME-STAR-INDEZ-150bp/Mus_musculus.GRCm38.91.chr.gtf 
 
 
 #Workshop Day 2
@@ -131,19 +139,24 @@ sbatch /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script
 #Step 14
 #Calculate FPKM
 
-bash /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/ensemble-v27-geneid-count-fpkm.MM10.sh /scratch/$USER/rnaseq_workshop/Sample_Name /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/REFERENCE-GENOME-STAR-INDEZ-150bp/Mus_musculus.GRCm38.91.chr.gtf.geneid-ensembleid-start-end.totalexonssize.bed /scratch/$USER/rnaseq_workshop
+#bash /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/ensemble-v27-geneid-count-fpkm.MM10.sh /scratch/$USER/rnaseq_workshop/Sample_Name /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/REFERENCE-GENOME-STAR-INDEZ-150bp/Mus_musculus.GRCm38.91.chr.gtf.geneid-ensembleid-start-end.totalexonssize.bed /scratch/$USER/rnaseq_workshop
+bash /project/rivanna-training/rna-seq_21/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/ensemble-v27-geneid-count-fpkm.MM10.sh /scratch/$USER/rnaseq_workshop/Sample_Name /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/REFERENCE-GENOME-STAR-INDEZ-150bp/Mus_musculus.GRCm38.91.chr.gtf.geneid-ensembleid-start-end.totalexonssize.bed /scratch/$USER/rnaseq_workshop
 
 
 #Step 15
 #Making count matrix
 
-bash /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/make-count-matrix.sh /scratch/$USER/rnaseq_workshop/Sample_Name /scratch/$USER/rnaseq_workshop/rnaseq_workshop_count_matrix.txt
+#bash /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/make-count-matrix.sh /scratch/$USER/rnaseq_workshop/Sample_Name /scratch/$USER/rnaseq_workshop/rnaseq_workshop_count_matrix.txt
+bash /project/rivanna-training/rna-seq_21/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/make-count-matrix.sh /scratch/$USER/rnaseq_workshop/Sample_Name /scratch/$USER/rnaseq_workshop/rnaseq_workshop_count_matrix.txt
 
 
 #Step 16
 #Making fpkm matrix
 
-bash /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/make-fpkm-matrix.sh /scratch/$USER/rnaseq_workshop/Sample_Name /scratch/$USER/rnaseq_workshop/rnaseq_workshop_fpkm_matrix.txt
+#bash /project/UVABX-PK/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/make-fpkm-matrix.sh /scratch/$USER/rnaseq_workshop/Sample_Name /scratch/$USER/rnaseq_workshop/rnaseq_workshop_fpkm_matrix.txt
+
+
+bash /project/rivanna-training/rna-seq_21/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/script/make-fpkm-matrix.sh /scratch/$USER/rnaseq_workshop/Sample_Name /scratch/$USER/rnaseq_workshop/rnaseq_workshop_fpkm_matrix.txt
 
 ############################################################################################
 ##
