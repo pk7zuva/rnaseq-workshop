@@ -1,0 +1,281 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install(c("apeglm","DESeq2", "tidyverse", "ggrepel", "ggplot2", "fgsea", "pheatmap", "calibrate", "gridtext", "msigdbr", "DT"))
+```
+
+
+
+```{r}
+library("apeglm")
+library("DESeq2") 
+library("tidyverse")
+library("ggrepel")
+library("ggplot2")
+```
+
+
+```{r}
+count_matrix <- read.table("/project/rivanna-training/rna-seq_21/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/rnaseq_workshop_Gene_Count_Table.txt", header=TRUE, row.names=1)
+
+metadata <- read.table("/project/rivanna-training/rna-seq_21/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OCT-NOV-2021/metadata.txt", header = TRUE, sep = ",")
+metadata
+```
+
+
+
+```{r}
+# measure the effect of treatment, controlling for sample level differences
+dds <- DESeqDataSetFromMatrix(count_matrix, metadata, ~Group)
+dds$Group <- relevel(dds$Group, "Naive")
+idx <- rowSums( counts(dds) >= 5 ) >= 2 # atleast 2 samples (out of 7 here) have value greater than or equal to 5
+dds <- dds[idx,]
+dds <- DESeq(dds)
+
+# Write out normalized counts
+library(tidyverse)
+dds %>% counts(normalized=TRUE) %>% write.csv("/home/pk7z/rnaseq_workshop_Gene_Count_Table-txi-normcounts.txt")
+```
+
+
+## Importnat information
+
+Blind dispersion estimation
+The two functions, vst and rlog have an argument blind, for whether the transformation should be blind to the sample information specified by the design formula. When blind equals TRUE (the default), the functions will re-estimate the dispersions using only an intercept. This setting should be used in order to compare samples in a manner wholly unbiased by the information about experimental groups, for example to perform sample QA (quality assurance) as demonstrated below.
+
+However, blind dispersion estimation is not the appropriate choice if one expects that many or the majority of genes (rows) will have large differences in counts which are explainable by the experimental design, and one wishes to transform the data for downstream analysis. In this case, using blind dispersion estimation will lead to large estimates of dispersion, as it attributes differences due to experimental design as unwanted noise, and will result in overly shrinking the transformed values towards each other. By setting blind to FALSE, the dispersions already estimated will be used to perform transformations, or if not present, they will be estimated using the current design formula. Note that only the fitted dispersion estimates from mean-dispersion trend line are used in the transformation (the global dependence of dispersion on mean for the entire experiment). So setting blind to FALSE is still for the most part not using the information about which samples were in which experimental group in applying the transformation.
+
+
+
+
+```{r, warning=FALSE, echo=TRUE, include=TRUE, fig.width = 6, fig.height = 4}
+##################PCA plot#################
+rld = rlog(dds, blind = FALSE)
+library(ggrepel)
+library(ggplot2)
+plotpca <- plotPCA(rld, intgroup = c("Group"), returnData = TRUE)
+percentVar <- round(100 * attr(plotpca, "percentVar"))
+ggplot(data = plotpca, aes(PC1, PC2, color=metadata$Group)) + geom_point(aes(colour = metadata$Group),size=4) +
+  geom_text_repel(aes(PC1, PC2, label = metadata$Sample)) +   xlab(paste0("PC1: ",percentVar[1],"% variance")) +
+  ylab(paste0("PC2: ",percentVar[2],"% variance")) +  coord_fixed() + scale_color_manual(values = c("darkgreen","blue","black","red","burlywood4","cadetblue","chocolate4")) + theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+panel.grid.minor = element_blank(), axis.line = element_line(colour = "black")) + theme( axis.title.x = element_text(color="black", size=14, face="bold"), axis.title.y = element_text(color="black", size=14, face="bold")) + theme(legend.text = element_text(color = "black", size = 12, face="bold")) + theme(legend.title=element_blank()) + theme(text = element_text(size=14, face="bold")) +  theme(legend.position="bottom")
+```
+
+
+
+## Samples are clustering based on their group
+
+
+
+
+```{r, warning=FALSE, echo=TRUE, include=TRUE, fig.width = 9, fig.height = 6}
+########################## MA plot for Group_OMPC_vs_Naive ##################################
+# lfcShrink is for shrunken log2 fold changes, which remove the noise associated with log2 fold changes from low count genes
+library("apeglm")
+resultsNames(dds)
+res <- results(dds, name="Group_OMPC_vs_Naive", tidy = TRUE)
+resLFC <- lfcShrink(dds, coef="Group_OMPC_vs_Naive", type="apeglm")
+plotMA(resLFC, xlab = "mean of normalized counts", alpha = 0.05, main = "MA plot", ylim=c(-4,4))
+# write files for data needed for volcano plots
+write.table(res, "/home/pk7z/rnaseq_workshop_Gene_Count_Table-res.Group_OMPC_vs_Naive.txt", sep="\t") # need this for the volcano plot, edit to add
+
+
+# write files for significant DEG's, FDR is 5%
+res_sig <- subset(res, padj < 0.05)
+write.table(res_sig, "/home/pk7z/rnaseq_workshop_Gene_Count_Table-res.Group_OMPC_vs_Naive_sig0.05.txt", sep="\t")
+```
+
+
+## Make Volcano Plot: RV_RVP_vs_RVN
+
+```{r}
+BiocManager::install(c("calibrate", "gridtext"))
+```
+
+
+```{r, warning=FALSE, echo=TRUE, include=TRUE, fig.width = 12, fig.height = 12}
+################################ Volcano plot for Group_OMPC_vs_Naive #########################################
+library(dplyr)
+library(calibrate)
+library(ggrepel)
+library(gridtext)
+# file was edited to have the header "GeneId"############Important##########
+res <- read.table("/home/pk7z/rnaseq_workshop_Gene_Count_Table-res.Group_OMPC_vs_Naive.txt", header=TRUE)
+
+#check for setting X limits
+range(res$log2FoldChange) #-6.917511 10.919991
+results = mutate(res, sig=ifelse(res$padj<0.05, "q-value < 0.05", "Not Significant"))
+#This line added later
+results <- results %>% filter ((!results$sig == "NA"))
+#For Y axis lab
+Y_axi_lab <- expression(bold(paste("-Log"[10] , " adjusted ", italic("p-value"))))
+X_axi_lab <- expression(bold(paste("-Log" [2] , " fold change ")))
+#This print grey and black (start)
+p = ggplot(results, aes(log2FoldChange, -log10(padj))) + ggtitle("OMPC_vs_Naive") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  geom_point(aes(col=sig)) +
+  scale_color_manual(values=c("grey", "black")) +
+ xlim(-10, +10) + ylim(0, 50)
+p = p+geom_text_repel(data=filter(results, padj<0.01,log2FoldChange>=3), aes(label=row), color="Red", max.overlaps = 100)
+p = p+geom_text_repel(data=filter(results, padj<0.01,log2FoldChange<=-3), aes(label=row), color="Blue", max.overlaps = 100) + theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+panel.grid.minor = element_blank(), axis.line = element_line(colour = "black")) +  theme(legend.text = element_text(color = "black", size = 14, face="bold")) + theme(legend.title=element_blank())  + labs(y=Y_axi_lab, x=X_axi_lab) + theme(legend.position="bottom") + theme( axis.title.x = element_text(color="black", size=14, face="bold"), axis.title.y = element_text(color="black", size=14, face="bold")) + theme(text = element_text(size=18, face="bold"))
+p
+```
+
+
+
+
+## Heatmap of top 100 genes selected based on adjusted p -value
+
+```{r, warning=FALSE, echo=TRUE, include=TRUE, fig.width = 6, fig.height = 18 }
+library("pheatmap")
+mat = assay(rld)[ head(order(res$padj),100), ] # select the top 100 genes with the lowest padj
+mat = mat - rowMeans(mat) # Subtract the row means from each value
+# Optional, but to make the plot nicer:
+df = as.data.frame(colData(rld)[,c("Group")]) # Create a dataframe with a column of the conditions
+colnames(df) = "RV" # Rename the column header
+rownames(df) = colnames(mat) # add rownames
+# and plot the actual heatmap
+pheatmap(mat, annotation_col=df, scale = "row", fontsize_row = 10.0, fontsize = 14, cellwidth = 30)
+```
+
+
+
+```{r}
+#install.packages("msigdbr")
+library(msigdbr)
+library(fgsea)
+```
+
+## Pathway Analysis (Group_OMPC_vs_Naive)
+## Load the DESeq result. Here all you’ll care is the gene symbol and the test statistic. Get just those.
+
+
+
+```{r}
+res2 <- res %>% 
+  dplyr::select(row, stat) %>% 
+  na.omit() %>% 
+  distinct() %>% 
+  group_by(row) %>% 
+  summarize(stat=mean(stat))
+
+```
+
+
+## Now create named vector of test statistics.
+
+```{r}
+ranks <- deframe(res2)
+head(ranks, 20)
+```
+
+
+## Selecting human and Hallmark geneset for pathway enrichment analysis
+
+
+```{r}
+m_df<- msigdbr(species = "Mus musculus", category = "H")
+head(m_df)
+```
+
+```{r}
+fgsea_sets<- m_df %>% split(x = .$gene_symbol, f = .$gs_name)
+fgsea_sets%>% 
+  head() %>% 
+  lapply(head)
+```
+
+
+```{r}
+fgseaRes<- fgseaMultilevel(fgsea_sets, stats = ranks)
+```
+
+
+```{r}
+#BiocManager::install("DT")
+```
+
+
+```{r}
+fgseaResTidy <- fgseaRes %>%
+  as_tibble() %>%
+  arrange(desc(NES))
+
+# Show in a nice table:
+fgseaResTidy %>% 
+  dplyr::select(-leadingEdge, -ES, -log2err) %>% 
+  arrange(padj) %>% 
+  DT::datatable()
+```
+
+## Some PI like list of enriched pathway based on p-value
+
+```{r}
+topPathwaysUp <- fgseaRes[ES > 0][head(order(pval), n=10), pathway]
+topPathwaysUp
+```
+
+
+```{r}
+topPathwaysDown <- fgseaRes[ES < 0][head(order(pval), n=10), pathway]
+topPathwaysDown
+```
+
+
+## Plot the normalized enrichment scores. Color the bar indicating whether or not the pathway was significant:
+
+## Group_OMPC_vs_Naive
+
+```{r, warning=FALSE, echo=TRUE, include=TRUE, fig.width = 12, fig.height = 12}
+ggplot(fgseaResTidy %>% arrange(NES) %>% head(n= 30), aes(reorder(pathway, NES), NES)) +
+  geom_col(aes(fill=NES<0)) +
+  coord_flip() +
+  labs(x="Pathway", y="Normalized Enrichment Score",
+       title="NES from GSEA (Hallamrk gene sets)") +
+  theme_minimal()
+```
+
+## Some PI like list of enriched pathway based on p-value
+
+## Plot the normalized enrichment scores. Color the bar indicating whether or not the pathway was significant:
+
+## RV_RVP_vs_RVN
+
+```{r, warning=FALSE, echo=TRUE, include=TRUE, fig.width = 12, fig.height = 12}
+ggplot(fgseaResTidy %>% arrange(padj) %>% head(n= 30), aes(reorder(pathway, NES), NES)) +
+  geom_col(aes(fill=NES<0)) +
+  coord_flip() +
+  labs(x="Pathway", y="Normalized Enrichment Score",
+       title="NES from GSEA (Hallamrk gene sets)") +
+  theme_minimal()
+```
+
+
+```{r}
+sessionInfo()
+```
+
+
+
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
