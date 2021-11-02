@@ -1,0 +1,8 @@
+Sample_Name,Sample,Group
+Naive-memory-sample-1,NM1,Naive
+Naive-memory-sample-2,NM2,Naive
+Naive-memory-sample-3,NM3,Naive
+Naive-memory-sample-4,NM4,Naive
+OMCP-memory-sample-1,OMPC1,OMPC
+OMCP-memory-sample-2,OMPC2,OMPC
+OMCP-memory-sample-3,OMPC3,OMPC
