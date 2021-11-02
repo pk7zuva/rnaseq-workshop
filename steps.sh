@@ -172,6 +172,9 @@ bash /project/rivanna-training/rna-seq_21/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-OC
 ############################################################################################
 
 
- 
+#Step 17
+# Cloning the repository
+
+git clone https://github.com/pk7zuva/rnaseq-workshop.git
  
 
