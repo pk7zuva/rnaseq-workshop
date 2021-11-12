@@ -53,7 +53,7 @@ sbatch /project/rivanna-training/rna-seq_21/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-
 
 
 #Step 7
-#Combine the fastqc report using multiqc (this program is not installed on Rivanna). Type the below two command one by one on your terminal
+#Combine the fastqc report using multiqc. Type the below two command one by one on your terminal
 
 module load bioconda/py3.8
 
