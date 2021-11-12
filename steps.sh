@@ -123,7 +123,7 @@ sbatch /project/rivanna-training/rna-seq_21/BIOINFORMATICS-CORE-RNASEQ-WORKSHOP-
 #Step 13 
 #Making index, mapping the reads to genome and transcriptome and finally quantitation
 #https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/
-#Arg1 is the list of /scratch/$USER/rnaseq_workshop/Sample_Name
+#Arg1 is the list of samples /scratch/$USER/rnaseq_workshop/Sample_Name
 #Arg2 is the name of present working directory. Type pwd in your terminal. copy and paste that path in place of $2
 #Arg3 is the first read suffix "_R1_001.fastq.gz"
 #Arg4 is 2nd read suffix "_R2_001.fastq.gz"
