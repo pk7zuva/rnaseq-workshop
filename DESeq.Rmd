@@ -260,6 +260,13 @@ ggplot(fgseaResTidy %>% arrange(padj) %>% head(n= 30), aes(reorder(pathway, NES)
 ```
 
 
+#GSEA style plot (up-regulated pathway)
+
+```{r, warning=FALSE, echo=TRUE, include=TRUE, fig.width = 12, fig.height = 12}
+plotEnrichment(fgsea_sets[["GOBP_APOPTOTIC_PROCESS"]],
+               ranks) + labs(title="GOBP_APOPTOTIC_PROCESS")
+```               
+
 ```{r}
 sessionInfo()
 ```
