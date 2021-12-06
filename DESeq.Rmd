@@ -2,6 +2,8 @@
 title: "R Notebook"
 output: html_notebook
 ---
+## Pankaj Kumar (Bioinformatics Core UVA)
+## Email: pk7z@virginia.edu
 
 ```{r}
 if (!requireNamespace("BiocManager", quietly = TRUE))
